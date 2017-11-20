@@ -32,13 +32,31 @@ const PatientListWithWidth = WidthProvider(PatientList);
 //     {i: 'c', x: 4, y: 0, w: 1, h: 2}
 // ];
 
-const initialLayout = [
-    {i: 'a', x: 0, y: 0, w: 2, h: 8, minH: 4, maxH: 12, lastHeight: 30},
-    {i: 'b', x: 2, y: 0, w: 6, h: 11, minH: 4, maxH: 12, minW: 2, maxW: 12, lastHeight: 30},
-    {i: 'c', x: 8, y: 0, w: 2, h: 6, minH: 4, maxH: 12, lastHeight: 30}
+function getFromLS(key) {
+    let ls = {};
+    if (localStorage) {
+        try {
+            ls = JSON.parse(localStorage.getItem('rgl-7-'+key)) || {};
+        } catch(e) {/*Ignore*/}
+    }
+    return ls[key];
+}
+
+function saveToLS(key, value) {
+    if (localStorage) {
+        localStorage.setItem('rgl-7-'+key, JSON.stringify({
+            [key]: value
+        }));
+    }
+}
+
+const initialLayout = getFromLS('layout') || [
+    {i: 'a', x: 0, y: 0, w: 2, h: 8, minH: 4, lastHeight: 30},
+    {i: 'b', x: 2, y: 0, w: 6, h: 11, minH: 4, minW: 2, maxW: 12, lastHeight: 30},
+    {i: 'c', x: 8, y: 0, w: 2, h: 6, minH: 4, lastHeight: 30}
 ];
 
-const initialItems = [
+const initialItems = getFromLS('items') || [
     {
         i: 'a',
         content:(props) =>
@@ -208,8 +226,9 @@ class App extends Component {
         // }
     }
 
-    onLayoutChange() {
+    onLayoutChange(layout) {
         console.log('layout', arguments);
+        saveToLS('layout', layout);
     }
 
     // generateDOM() {
@@ -232,7 +251,7 @@ class App extends Component {
 
     onRemoveItem(i) {
         console.log('removing', i);
-        this.setState({layout: _.reject(this.state.layout, {i: i}), items: _.reject(this.state.items, {i: i})});
+        this.setState({layout: _.reject(this.state.layout, {i: i}), items: _.reject(this.state.items, {i: i})}/*, () => saveToLS('items', this.state.items)*/);
         // this.setState((prevState) => {
         //     const newState = {...prevState};
         //     newState.layout = prevState.layout.filter(x => x.i !== i);
@@ -281,7 +300,9 @@ class App extends Component {
                                      containerPadding={[50, 50]}
                         // margin={[50, 50]}
                     >
-                        {this.state.items.map(item => (
+                        {this.state.items
+                            .filter(item => !!(_.find(this.state.layout, {i: item.i})))
+                            .map(item => (
                             <div key={item.i} className="Grid Overflow">
                                 <span className="remove" style={removeStyle}
                                       onClick={this.onRemoveItem.bind(this, item.i)}>x

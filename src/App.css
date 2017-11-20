@@ -38,7 +38,7 @@ body{
   border: thin solid red;
 }
 .Overflow {
-  overflow-y: hidden;
+  overflow-y: scroll;
 }
 .layout {
   text-align: center;
