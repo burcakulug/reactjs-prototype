@@ -4,6 +4,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+body{
+  background-color: lightgray;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -27,4 +31,19 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.Grid {
+  background-color: burlywood;
+  border: thin solid red;
+}
+.Overflow {
+  overflow-y: hidden;
+}
+.layout {
+  text-align: center;
+  background-color: darkseagreen;
+}
+.Margin-20 {
+  margin: 20px;
 }
