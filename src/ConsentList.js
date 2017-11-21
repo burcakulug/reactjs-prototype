@@ -49,7 +49,8 @@ class ConsentList extends Component {
                         <Subheader>Consents</Subheader>
                         {this.props.consents.map(consent => (
                             <ListItem key={consent.id}
-                                      primaryText={consent.id}
+                                      primaryText={`ID: ${consent.id}`}
+                                      secondaryText={'Start Date: ' + consent.startDate[1] + '/' + consent.startDate[2] + '/' + consent.startDate[0]}
                                       // secondaryText={'Birth Date' + user.birthDate[1] + '/' + user.birthDate[2] + '/' + user.birthDate[0]}
                                       // onClick={() => this.props.onClick(user)}
                             />
