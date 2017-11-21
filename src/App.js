@@ -36,15 +36,16 @@ function getFromLS(key) {
     let ls = {};
     if (localStorage) {
         try {
-            ls = JSON.parse(localStorage.getItem('rgl-7-'+key)) || {};
-        } catch(e) {/*Ignore*/}
+            ls = JSON.parse(localStorage.getItem('rgl-7-' + key)) || {};
+        } catch (e) {/*Ignore*/
+        }
     }
     return ls[key];
 }
 
 function saveToLS(key, value) {
     if (localStorage) {
-        localStorage.setItem('rgl-7-'+key, JSON.stringify({
+        localStorage.setItem('rgl-7-' + key, JSON.stringify({
             [key]: value
         }));
     }
@@ -59,7 +60,7 @@ const initialLayout = getFromLS('layout') || [
 const initialItems = getFromLS('items') || [
     {
         i: 'a',
-        content:(props) =>
+        content: (props) =>
             <div className="Margin-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
                 dapibus molestie tortor sed tristique. Sed quis pretium enim. Donec accumsan blandit
                 tellus,
@@ -132,7 +133,7 @@ const initialItems = getFromLS('items') || [
         i: 'b',
         content: (props) =>
             <PatientTableGrid className="Margin-20"
-                              // users={this.state.users}
+                // users={this.state.users}
                               {...props}
                 // showSize={true}
                 // height={this.state.layout.filter(x => x.i ==='b')[0].lastHeight.toString()}
@@ -142,7 +143,7 @@ const initialItems = getFromLS('items') || [
         i: 'c',
         content: (props) =>
             <PatientListGrid className="Margin-20"
-                             // users={this.state.users}
+                // users={this.state.users}
                              {...props}
                 // showSize={true}
             />
@@ -249,9 +250,24 @@ class App extends Component {
         // console.log(JSON.stringify(this.state));
     }
 
+    onMaximizeItem(i){
+        this.setState( (prevState) => {
+            // debugger;
+            const node = _.find(prevState.layout, {i: i});
+            const newState = {...prevState, layout: [..._.reject(prevState.layout, node)]};
+            const {w, h} = _.find(initialLayout, {i: i});
+            const newLayout = {...node, w: node.w === 12 && node.h === 12 ? w : 12, h: node.w === 12 && node.h === 12 ? h : 12};
+            newState.layout.push(newLayout)
+            return newState;
+        });
+    }
+
     onRemoveItem(i) {
         console.log('removing', i);
-        this.setState({layout: _.reject(this.state.layout, {i: i}), items: _.reject(this.state.items, {i: i})}/*, () => saveToLS('items', this.state.items)*/);
+        this.setState({
+            layout: _.reject(this.state.layout, {i: i}),
+            items: _.reject(this.state.items, {i: i})
+        }/*, () => saveToLS('items', this.state.items)*/);
         // this.setState((prevState) => {
         //     const newState = {...prevState};
         //     newState.layout = prevState.layout.filter(x => x.i !== i);
@@ -276,8 +292,9 @@ class App extends Component {
             position: 'absolute',
             right: '2px',
             top: 0,
-            cursor: 'pointer',
+            cursor: 'pointer'
         };
+        const maximizeStyle = {...removeStyle, right: '12px'};
         console.log('render', this.state)
         return (
             <div className="App">
@@ -303,14 +320,18 @@ class App extends Component {
                         {this.state.items
                             .filter(item => !!(_.find(this.state.layout, {i: item.i})))
                             .map(item => (
-                            <div key={item.i} className="Grid Overflow">
-                                <span className="remove" style={removeStyle}
-                                      onClick={this.onRemoveItem.bind(this, item.i)}>x
+                                <div key={item.i} className="Grid Overflow">
+                                    <span className="remove" style={maximizeStyle}
+                                          onClick={this.onMaximizeItem.bind(this, item.i)}>□
                                 </span>
-                                <br/>
-                                {item.content({users: this.state.users})}
-                            </div>
-                                ))}
+                                    <span className="remove" style={removeStyle}
+                                          onClick={this.onRemoveItem.bind(this, item.i)}>x
+                                </span>
+
+                                    <br/>
+                                    {item.content({users: this.state.users})}
+                                </div>
+                            ))}
                         {/*<div key="a" className="Grid Overflow">*/}
 
                         {/*</div>*/}
