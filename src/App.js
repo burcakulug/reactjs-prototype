@@ -277,7 +277,7 @@ class App extends Component {
     }
 
     getUsers() {
-        const users = fetch("/users")
+        const users = fetch("/ums/users")
             .then(resp => resp.json())
             .then(json => json.content)/*
             .then(json => {
