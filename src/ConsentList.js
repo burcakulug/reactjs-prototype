@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './PatientList.css';
+import './ConsentList.css';
 import {
     List,
     ListItem,
@@ -9,14 +9,14 @@ import {
 import RefreshIndicatorLoading from "./RefreshIndicatorLoading";
 
 
-class PatientList extends Component {
+class ConsentList extends Component {
     // constructor(props){
     //     super(props);
     //     const users = this.getUsers();
     //     console.log(users);
     //     this.state = {users: users};
     // }
-    state = {users: []};
+    // state = {consents: []};
 
     // async componentDidMount(){
     //     const users = await this.getUsers();
@@ -38,19 +38,20 @@ class PatientList extends Component {
         // console.log('state:', this.state);
         // console.log('props:', this.props);
         // const { width, height } = this.props.size;
+         console.log('ConsentList props:', this.props);
         return (
             <div key={this.props.key} >
-                {this.props.users.length === 0 ?
+                {this.props.consents.length === 0 ?
                     <RefreshIndicatorLoading /> :
 
 
                     <List>
-                    <Subheader>Users</Subheader>
-                        {this.props.users.map(user => (
-                            <ListItem key={user.id}
-                                primaryText={user.firstName + ' ' + user.lastName}
-                                secondaryText={'Birth Date' + user.birthDate[1] + '/' + user.birthDate[2] + '/' + user.birthDate[0]}
-                                      onClick={() => this.props.onClick(user)}
+                        <Subheader>Consents</Subheader>
+                        {this.props.consents.map(consent => (
+                            <ListItem key={consent.id}
+                                      primaryText={consent.id}
+                                      // secondaryText={'Birth Date' + user.birthDate[1] + '/' + user.birthDate[2] + '/' + user.birthDate[0]}
+                                      // onClick={() => this.props.onClick(user)}
                             />
                         ))}
 
@@ -66,4 +67,4 @@ class PatientList extends Component {
     }
 }
 
-export default PatientList;
+export default ConsentList;

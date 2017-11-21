@@ -4,6 +4,10 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 class PatientTable extends Component {
 
+    onRowClick(){
+        console.log('row click');
+    }
+
     render() {
         // console.log('state:', this.state);
         console.log('props:', this.props);
@@ -25,8 +29,8 @@ class PatientTable extends Component {
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
                             {this.props.users.slice(0).map(user => (
-                                <TableRow key={user.id}>
-                                    <TableRowColumn>{user.id}</TableRowColumn>
+                                <TableRow key={user.id} onClick={this.onRowClick} onRowClick={this.onRowClick} onCellClick={this.onRowClick}>
+                                    <TableRowColumn onClick={this.onRowClick}>{user.id}</TableRowColumn>
                                     <TableRowColumn>{user.userAuthId}</TableRowColumn>
                                     <TableRowColumn>{user.firstName}</TableRowColumn>
                                     <TableRowColumn>{user.lastName}</TableRowColumn>

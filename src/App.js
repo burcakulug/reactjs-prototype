@@ -12,6 +12,7 @@ import PatientListGrid from "./PatientListGrid";
 import PatientTableGrid from "./PatientTableGrid";
 
 import _ from 'lodash';
+import ConsentList from "./ConsentList";
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -150,6 +151,8 @@ const initialItems = getFromLS('items') || [
     }
 ];
 
+const consentList = (props) => (<ConsentList className="Margin-20" {...props}/>);
+
 class App extends Component {
     static defaultProps = {
         isDraggable: true,
@@ -166,6 +169,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.onResize = this.onResize.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
 
     // generateDOM() {
@@ -262,6 +266,41 @@ class App extends Component {
         });
     }
 
+    async onClick(user){
+        console.log('clicked', user);
+        const consents = await this.getConsents(user.mrn);
+        console.log(consents);
+        if(consents && consents.length > 0){
+            this.setState(prevState => {
+                // const curUser = {..._.find(prevState.users, {id: user.id})};
+                // const otherUsers = [..._.reject(prevState.users, {id: user.id})];
+
+                const newState = {layout: [...prevState.layout], items: [...prevState.items]};
+                newState.layout.push({i: user.mrn, x: 0, y: 0, w: 6, h: 6});
+                newState.items.push({
+                    i: user.mrn,
+                    content: ((props) =>{
+                        const newProps = {...props, consents: consents};
+                        console.log('newProps', newProps);
+                        return consentList(newProps);
+                    })
+                });
+                return newState;
+            });
+        }
+    }
+
+    getConsents(mrn) {
+        const consents = fetch(`/pcm/patients/${mrn}/consents`)
+            .then(resp => resp.json())
+            .then(json => json.content)/*
+            .then(json => {
+                console.log(json);
+                return json;
+            })*/;
+        return consents;
+    }
+
     onRemoveItem(i) {
         console.log('removing', i);
         this.setState({
@@ -277,7 +316,7 @@ class App extends Component {
     }
 
     getUsers() {
-        const users = fetch("/ums/users")
+        const users = fetch("/ums/users?page=4")
             .then(resp => resp.json())
             .then(json => json.content)/*
             .then(json => {
@@ -329,7 +368,7 @@ class App extends Component {
                                 </span>
 
                                     <br/>
-                                    {item.content({users: this.state.users})}
+                                    {item.content({users: this.state.users, onClick: this.onClick})}
                                 </div>
                             ))}
                         {/*<div key="a" className="Grid Overflow">*/}
