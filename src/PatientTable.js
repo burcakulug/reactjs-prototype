@@ -21,11 +21,15 @@ class PatientTable extends Component {
                 {this.props.users.length === 0 ?
                     <RefreshIndicatorLoading/> :
 
-                    <Table height={(parseInt(this.props.height)-70)+'px'}>
+                    <Table
+                        // height={(parseInt(this.props.height)-70)+'px'}
+                        // width="100%"
+                        style={{whiteSpace: 'wrap'}}
+                    >
                         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                             <TableRow>
-                                <TableHeaderColumn>ID</TableHeaderColumn>
-                                <TableHeaderColumn>Use Auth ID</TableHeaderColumn>
+                                <TableHeaderColumn style={{width: '10%', whiteSpace: 'nowrap'}}>ID</TableHeaderColumn>
+                                <TableHeaderColumn style={{whiteSpace: 'wrap'}}>Use Auth ID</TableHeaderColumn>
                                 <TableHeaderColumn>First Name</TableHeaderColumn>
                                 <TableHeaderColumn>Last Name</TableHeaderColumn>
                                 <TableHeaderColumn>Birth Date</TableHeaderColumn>
@@ -35,8 +39,8 @@ class PatientTable extends Component {
                         <TableBody displayRowCheckbox={false}>
                             {this.props.users.slice(0).map(user => (
                                 <TableRow key={user.id}>
-                                    <TableRowColumn onClick={this.onRowClick}>{user.id}</TableRowColumn>
-                                    <TableRowColumn>{user.userAuthId}</TableRowColumn>
+                                    <TableRowColumn style={{width: '10%', whiteSpace: 'nowrap'}} onClick={this.onRowClick}>{user.id}</TableRowColumn>
+                                    <TableRowColumn style={{whiteSpace: 'wrap'}}>{user.userAuthId}</TableRowColumn>
                                     <TableRowColumn>{user.firstName}</TableRowColumn>
                                     <TableRowColumn>{user.lastName}</TableRowColumn>
                                     <TableRowColumn>{user.birthDate[1]}/{user.birthDate[2]}/{user.birthDate[0]}</TableRowColumn>

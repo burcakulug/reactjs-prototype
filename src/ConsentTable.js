@@ -84,11 +84,11 @@ class ConsentTable extends Component {
                     <Table height={(parseInt(this.props.height)-70)+'px'}>
                         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                             <TableRow>
-                                <TableHeaderColumn>ID</TableHeaderColumn>
-                                <TableHeaderColumn>From Providers</TableHeaderColumn>
-                                <TableHeaderColumn>To Provider</TableHeaderColumn>
-                                <TableHeaderColumn>Share Purposes</TableHeaderColumn>
-                                <TableHeaderColumn>Share Categories</TableHeaderColumn>
+                                <TableHeaderColumn style={{width: '10%', whiteSpace: 'nowrap'}}>ID</TableHeaderColumn>
+                                <TableHeaderColumn style={{whiteSpace: 'wrap'}}>From Providers</TableHeaderColumn>
+                                <TableHeaderColumn style={{whiteSpace: 'wrap'}}>To Provider</TableHeaderColumn>
+                                <TableHeaderColumn style={{whiteSpace: 'wrap'}}>Share Purposes</TableHeaderColumn>
+                                <TableHeaderColumn style={{whiteSpace: 'wrap'}}>Share Categories</TableHeaderColumn>
                                 <TableHeaderColumn>Start Date</TableHeaderColumn>
                                 <TableHeaderColumn>End Date</TableHeaderColumn>
                                 <TableHeaderColumn>Sign Date</TableHeaderColumn>
@@ -98,11 +98,11 @@ class ConsentTable extends Component {
                         <TableBody displayRowCheckbox={false}>
                         {this.props.consents.map(consent => (
                             <TableRow key={consent.id}>
-                                <TableRowColumn>{consent.id}</TableRowColumn>
-                                <TableRowColumn>{providerNames({providers: consent.fromProviders})}</TableRowColumn>
-                                <TableRowColumn>{providerNames({providers: consent.toProviders})}</TableRowColumn>
-                                <TableRowColumn>{ConsentTable.displayNames(consent.sharePurposes)}</TableRowColumn>
-                                <TableRowColumn>{ConsentTable.displayNames(consent.shareSensitivityCategories)}</TableRowColumn>
+                                <TableRowColumn style={{width: '10%', whiteSpace: 'nowrap'}}>{consent.id}</TableRowColumn>
+                                <TableRowColumn style={{whiteSpace: 'wrap'}}>{providerNames({providers: consent.fromProviders})}</TableRowColumn>
+                                <TableRowColumn style={{whiteSpace: 'wrap'}}>{providerNames({providers: consent.toProviders})}</TableRowColumn>
+                                <TableRowColumn style={{whiteSpace: 'wrap'}}>{ConsentTable.displayNames(consent.sharePurposes)}</TableRowColumn>
+                                <TableRowColumn style={{whiteSpace: 'wrap'}}>{ConsentTable.displayNames(consent.shareSensitivityCategories)}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.formatLocalDate(consent.startDate)}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.formatLocalDate(consent.endDate)}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.formatTimestamp(consent.attestedDate)}</TableRowColumn>
