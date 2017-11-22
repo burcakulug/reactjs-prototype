@@ -13,6 +13,8 @@ import PatientTableGrid from "./PatientTableGrid";
 
 import _ from 'lodash';
 import ConsentList from "./ConsentList";
+import {AppBar, Card, CardHeader, CardText, IconButton} from "material-ui";
+import {NavigationClose, NavigationFullscreen} from "material-ui/svg-icons";
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -61,6 +63,7 @@ const initialLayout = getFromLS('layout') || [
 const initialItems = getFromLS('items') || [
     {
         i: 'a',
+        title: 'Lorem Ipsum',
         content: (props) =>
             <div className="Margin-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
                 dapibus molestie tortor sed tristique. Sed quis pretium enim. Donec accumsan blandit
@@ -132,6 +135,7 @@ const initialItems = getFromLS('items') || [
     },
     {
         i: 'b',
+        title: 'Patient Table',
         content: (props) =>
             <PatientTableGrid className="Margin-20"
                 // users={this.state.users}
@@ -142,8 +146,9 @@ const initialItems = getFromLS('items') || [
     },
     {
         i: 'c',
+        title: 'Patient List',
         content: (props) =>
-            <PatientListGrid className="Margin-20"
+            <PatientListGrid className="Margin-20" style={{overflowY: 'scroll', height: '100px', width: '100px'}}
                 // users={this.state.users}
                              {...props}
                 // showSize={true}
@@ -261,7 +266,7 @@ class App extends Component {
             // debugger;
             const node = _.find(prevState.layout, {i: i});
             const newState = {...prevState, layout: [..._.reject(prevState.layout, node)]};
-            const {w, h} = _.find(initialLayout, {i: i});
+            const {w, h} = _.find(initialLayout, {i: i}) || {w:6, h:6};
             const newLayout = {...node, w: node.w === 12 && node.h === 12 ? w : 12, h: node.w === 12 && node.h === 12 ? h : 12};
             newState.layout.push(newLayout)
             return newState;
@@ -283,6 +288,7 @@ class App extends Component {
                 newState.layout.push({i: user.mrn, x: 0, y: 0, w: 6, h: 6});
                 newState.items.push({
                     i: user.mrn,
+                    title: `${user.firstName} ${user.lastName}'s Consents`,
                     content: ((props) =>{
                         const newProps = {...props, consents: consents};
                         console.log('newProps', newProps);
@@ -351,6 +357,7 @@ class App extends Component {
 
 
                 <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+                {/*<MuiThemeProvider>*/}
                     <ReactGridLayout className="layout" layout={this.state.layout}
                                      cols={12}
                                      rowHeight={30} width={window.innerWidth}
@@ -363,16 +370,31 @@ class App extends Component {
                         {this.state.items
                             .filter(item => !!(_.find(this.state.layout, {i: item.i})))
                             .map(item => (
-                                <div key={item.i} className="Grid Overflow">
-                                    <span className="remove" style={maximizeStyle}
-                                          onClick={this.onMaximizeItem.bind(this, item.i)}>□
-                                </span>
-                                    <span className="remove" style={removeStyle}
-                                          onClick={this.onRemoveItem.bind(this, item.i)}>x
-                                </span>
+                                <div key={item.i} className="Grid Overflow" >
+                                    <AppBar
+                                        title={item.title}
+                                        // showMenuIconButton={false}
+                                        onRightIconButtonTouchTap={this.onRemoveItem.bind(this, item.i)}
+                                        iconElementRight={<IconButton><NavigationClose /></IconButton>}
+                                        onLeftIconButtonTouchTap={this.onMaximizeItem.bind(this, item.i)}
+                                        iconElementLeft={<IconButton><NavigationFullscreen /></IconButton>}
+                                    />
+                                    <Card>
+                                        <CardText>
+                                            {item.content({users: this.state.users, onClick: this.onClick, showSize: false})}
+                                        </CardText>
 
-                                    <br/>
-                                    {item.content({users: this.state.users, onClick: this.onClick, showSize: false})}
+                                    </Card>
+
+                                    {/*<span className="remove" style={maximizeStyle}*/}
+                                          {/*onClick={this.onMaximizeItem.bind(this, item.i)}>□*/}
+                                {/*</span>*/}
+                                    {/*<span className="remove" style={removeStyle}*/}
+                                          {/*onClick={this.onRemoveItem.bind(this, item.i)}>x*/}
+                                {/*</span>*/}
+
+                                    {/*<br/>*/}
+
                                 </div>
                             ))}
                         {/*<div key="a" className="Grid Overflow">*/}

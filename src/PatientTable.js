@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import RefreshIndicatorLoading from "./RefreshIndicatorLoading";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui";
+import {
+    FloatingActionButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow,
+    TableRowColumn
+} from "material-ui";
+import {ActionAssignment} from "material-ui/svg-icons";
 
 class PatientTable extends Component {
 
@@ -25,16 +29,23 @@ class PatientTable extends Component {
                                 <TableHeaderColumn>First Name</TableHeaderColumn>
                                 <TableHeaderColumn>Last Name</TableHeaderColumn>
                                 <TableHeaderColumn>Birth Date</TableHeaderColumn>
+                                <TableHeaderColumn>Actions</TableHeaderColumn>
                             </TableRow>
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
                             {this.props.users.slice(0).map(user => (
-                                <TableRow key={user.id} onClick={this.onRowClick} onRowClick={this.onRowClick} onCellClick={this.onRowClick}>
+                                <TableRow key={user.id}>
                                     <TableRowColumn onClick={this.onRowClick}>{user.id}</TableRowColumn>
                                     <TableRowColumn>{user.userAuthId}</TableRowColumn>
                                     <TableRowColumn>{user.firstName}</TableRowColumn>
                                     <TableRowColumn>{user.lastName}</TableRowColumn>
                                     <TableRowColumn>{user.birthDate[1]}/{user.birthDate[2]}/{user.birthDate[0]}</TableRowColumn>
+                                    <TableRowColumn>
+                                        <FloatingActionButton mini={true} onClick={() => this.props.onClick(user)}>
+                                            {/*<span>Consents</span>*/}
+                                            <ActionAssignment/>
+                                        </FloatingActionButton>
+                                    </TableRowColumn>
                                 </TableRow>
                             ))}
                         </TableBody>

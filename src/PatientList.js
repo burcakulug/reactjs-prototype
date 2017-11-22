@@ -45,7 +45,7 @@ class PatientList extends Component {
 
 
                     <List>
-                    <Subheader>Users</Subheader>
+                    {/*<Subheader>Users</Subheader>*/}
                         {this.props.users.map(user => (
                             <ListItem key={user.id}
                                 primaryText={user.firstName + ' ' + user.lastName}
