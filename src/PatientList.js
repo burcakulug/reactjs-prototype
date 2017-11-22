@@ -50,7 +50,7 @@ class PatientList extends Component {
                             <ListItem key={user.id}
                                 primaryText={user.firstName + ' ' + user.lastName}
                                 secondaryText={'Birth Date' + user.birthDate[1] + '/' + user.birthDate[2] + '/' + user.birthDate[0]}
-                                      onClick={() => this.props.onClick(user)}
+                                      onClick={() => this.props.onClick(user, 'list')}
                             />
                         ))}
 

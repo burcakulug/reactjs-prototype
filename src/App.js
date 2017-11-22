@@ -15,6 +15,7 @@ import _ from 'lodash';
 import ConsentList from "./ConsentList";
 import {AppBar, Card, CardHeader, CardText, IconButton} from "material-ui";
 import {NavigationClose, NavigationFullscreen} from "material-ui/svg-icons";
+import ConsentTable from "./ConsentTable";
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -157,6 +158,7 @@ const initialItems = getFromLS('items') || [
 ];
 
 const consentList = (props) => (<ConsentList className="Margin-20" {...props}/>);
+const consentTable = (props) => (<ConsentTable className="Margin-20" {...props}/>);
 
 class App extends Component {
     static defaultProps = {
@@ -273,7 +275,7 @@ class App extends Component {
         });
     }
 
-    async onClick(user){
+    async onClick(user, componentType){
         console.log('clicked', user);
         //TODO: mock data because of latency
         // const consents = await this.getConsents(user.mrn);
@@ -284,18 +286,23 @@ class App extends Component {
                 // const curUser = {..._.find(prevState.users, {id: user.id})};
                 // const otherUsers = [..._.reject(prevState.users, {id: user.id})];
 
-                const newState = {layout: [...prevState.layout], items: [...prevState.items]};
-                newState.layout.push({i: user.mrn, x: 0, y: 0, w: 6, h: 6});
-                newState.items.push({
-                    i: user.mrn,
-                    title: `${user.firstName} ${user.lastName}'s Consents`,
-                    content: ((props) =>{
-                        const newProps = {...props, consents: consents};
-                        console.log('newProps', newProps);
-                        return consentList(newProps);
-                    })
-                });
-                return newState;
+                if(!_.find(prevState.items, {i: user.mrn})){
+                    const newState = {layout: [...prevState.layout], items: [...prevState.items]};
+                    newState.layout.push({i: user.mrn, x: 0, y: 0, w: 6, h: 6});
+                    newState.items.push({
+                        i: user.mrn,
+                        title: `${user.firstName} ${user.lastName}'s Consents`,
+                        content: ((props) =>{
+                            const newProps = {...props, consents: consents};
+                            console.log('newProps', newProps);
+                            return componentType === 'list' ?  consentList(newProps) : consentTable(newProps);
+                        })
+                    });
+                    return newState;
+                } else{
+                    return prevState;
+                }
+
             });
         }
     }

@@ -41,7 +41,7 @@ class PatientTable extends Component {
                                     <TableRowColumn>{user.lastName}</TableRowColumn>
                                     <TableRowColumn>{user.birthDate[1]}/{user.birthDate[2]}/{user.birthDate[0]}</TableRowColumn>
                                     <TableRowColumn>
-                                        <FloatingActionButton mini={true} onClick={() => this.props.onClick(user)}>
+                                        <FloatingActionButton mini={true} onClick={() => this.props.onClick(user, 'table')}>
                                             {/*<span>Consents</span>*/}
                                             <ActionAssignment/>
                                         </FloatingActionButton>
