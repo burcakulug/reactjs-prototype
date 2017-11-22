@@ -8,7 +8,17 @@ import {
 } from "material-ui";
 import RefreshIndicatorLoading from "./RefreshIndicatorLoading";
 
-
+const providerNames = ((props) =>{
+    // return providers
+    //     .map(provider => provider.name ? provider.name : `${provider.firstName} ${provider.lastName}`)
+    //     .join(', ');
+    debugger;
+     return (<ul>{props.providers
+        .map(provider => <li key={provider.id}>{provider.name ? provider.name : `${provider.firstName} ${provider.lastName}`}</li>)
+        // .map(name => <li>{name}</li>)
+        }
+    </ul>);
+});
 class ConsentTable extends Component {
     // constructor(props){
     //     super(props);
@@ -33,11 +43,18 @@ class ConsentTable extends Component {
     //         })*/;
     //     return users;
     // }
-    static providerNames(providers){
-        return providers
-            .map(provider => provider.name ? provider.name : `${provider.firstName} ${provider.lastName}`)
-            .join(', ');
-    }
+
+    // static providerNames(providers){
+    //     // return providers
+    //     //     .map(provider => provider.name ? provider.name : `${provider.firstName} ${provider.lastName}`)
+    //     //     .join(', ');
+    //     return (<ul>{providers
+    //         .map(provider => provider.name ? provider.name : `${provider.firstName} ${provider.lastName}`)
+    //         .map(name => <li>name</li>)
+    //         .join()}
+    //     </ul>);
+    // }
+
     static displayNames(items){
         return items.map(item => item.display).join(', ');
     }
@@ -48,7 +65,8 @@ class ConsentTable extends Component {
     static formatTimestamp(timestamp){
         if(timestamp){
             const d = new Date(timestamp);
-            return `${d.getMonth()}/${d.getDay()}/${d.getYear()}`;
+            console.log('date', d, `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`);
+            return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
         }
         return '---';
     }
@@ -81,8 +99,8 @@ class ConsentTable extends Component {
                         {this.props.consents.map(consent => (
                             <TableRow key={consent.id}>
                                 <TableRowColumn>{consent.id}</TableRowColumn>
-                                <TableRowColumn>{ConsentTable.providerNames(consent.fromProviders)}</TableRowColumn>
-                                <TableRowColumn>{ConsentTable.providerNames(consent.toProviders)}</TableRowColumn>
+                                <TableRowColumn>{providerNames({providers: consent.fromProviders})}</TableRowColumn>
+                                <TableRowColumn>{providerNames({providers: consent.toProviders})}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.displayNames(consent.sharePurposes)}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.displayNames(consent.shareSensitivityCategories)}</TableRowColumn>
                                 <TableRowColumn>{ConsentTable.formatLocalDate(consent.startDate)}</TableRowColumn>
