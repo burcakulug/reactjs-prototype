@@ -13,7 +13,7 @@ import PatientTableGrid from "./PatientTableGrid";
 
 import _ from 'lodash';
 import ConsentList from "./ConsentList";
-import {AppBar, Card, CardHeader, CardText, IconButton} from "material-ui";
+import {AppBar, Card, CardHeader, CardText, IconButton, RaisedButton} from "material-ui";
 import {NavigationClose, NavigationFullscreen, NavigationFullscreenExit} from "material-ui/svg-icons";
 import ConsentTable from "./ConsentTable";
 
@@ -45,6 +45,12 @@ function getFromLS(key) {
         }
     }
     return ls[key];
+}
+
+function clearLS(){
+    if (localStorage) {
+        localStorage.clear();
+    }
 }
 
 function saveToLS(key, value) {
@@ -180,6 +186,16 @@ class App extends Component {
         this.onResize = this.onResize.bind(this);
         this.onClick = this.onClick.bind(this);
         this.onLayoutChange = this.onLayoutChange.bind(this);
+    }
+
+    clearLocalStorage(){
+        clearLS();
+    }
+
+    reloadPage(){
+        if(window && window.location){
+            window.location.reload(false);
+        }
     }
 
     // generateDOM() {
@@ -380,6 +396,9 @@ class App extends Component {
 
                 <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
                 {/*<MuiThemeProvider>*/}
+                <div>
+                    <RaisedButton label="Clear Local Storage" secondary={true} style={{margin: 12}} onClick={this.clearLocalStorage} />
+                    <RaisedButton label="Reload Page" secondary={true} style={{margin: 12}} onClick={this.reloadPage} />
                     <ReactGridLayout className="layout" layout={this.state.layout}
                                      cols={12}
                                      rowHeight={30} width={window.innerWidth}
@@ -432,7 +451,7 @@ class App extends Component {
 
                         {/*</div>*/}
                     </ReactGridLayout>
-
+                </div>
                 </MuiThemeProvider>
 
             </div>
