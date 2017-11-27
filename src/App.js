@@ -14,7 +14,7 @@ import PatientTableGrid from "./PatientTableGrid";
 import _ from 'lodash';
 import ConsentList from "./ConsentList";
 import {AppBar, Card, CardHeader, CardText, IconButton} from "material-ui";
-import {NavigationClose, NavigationFullscreen} from "material-ui/svg-icons";
+import {NavigationClose, NavigationFullscreen, NavigationFullscreenExit} from "material-ui/svg-icons";
 import ConsentTable from "./ConsentTable";
 
 // const ReactGridLayout = WidthProvider(RGL);
@@ -54,6 +54,8 @@ function saveToLS(key, value) {
         }));
     }
 }
+
+const maxSize = {h: 12, w: 12};
 
 const initialLayout = getFromLS('layout') || [
     {i: 'a', x: 0, y: 0, w: 2, h: 8, minH: 4, lastHeight: 30},
@@ -177,6 +179,7 @@ class App extends Component {
         super(props);
         this.onResize = this.onResize.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.onLayoutChange = this.onLayoutChange.bind(this);
     }
 
     // generateDOM() {
@@ -240,7 +243,13 @@ class App extends Component {
 
     onLayoutChange(layout) {
         console.log('layout', arguments);
-        saveToLS('layout', layout);
+        this.setState((prevState) => {
+            const mergedLayout = prevState.layout
+                .map(l => ({...l, ..._.find(layout, {i: l.i})}));
+            saveToLS('layout', mergedLayout);
+            return {layout: [...mergedLayout]};
+        });
+
     }
 
     // generateDOM() {
@@ -268,8 +277,14 @@ class App extends Component {
             // debugger;
             const node = _.find(prevState.layout, {i: i});
             const newState = {...prevState, layout: [..._.reject(prevState.layout, node)]};
-            const {w, h} = _.find(initialLayout, {i: i}) || {w:6, h:6};
-            const newLayout = {...node, w: node.w === 12 && node.h === 12 ? w : 12, h: node.w === 12 && node.h === 12 ? h : 12};
+            const newLayout = {...node, w: node.oldSize ? node.oldSize.w : maxSize.w, h: node.oldSize ? node.oldSize.h : maxSize.h};
+            if(node.oldSize && newLayout.oldSize){
+                delete newLayout.oldSize;
+                newLayout.x=0;
+                newLayout.y=0;
+            } else {
+                newLayout.oldSize = {h: node.h, w: node.w};
+            }
             newState.layout.push(newLayout)
             return newState;
         });
@@ -384,7 +399,7 @@ class App extends Component {
                                         onRightIconButtonTouchTap={this.onRemoveItem.bind(this, item.i)}
                                         iconElementRight={<IconButton><NavigationClose /></IconButton>}
                                         onLeftIconButtonTouchTap={this.onMaximizeItem.bind(this, item.i)}
-                                        iconElementLeft={<IconButton><NavigationFullscreen /></IconButton>}
+                                        iconElementLeft={_.find(this.state.layout, {i: item.i}).oldSize ? <IconButton><NavigationFullscreenExit /></IconButton> : <IconButton><NavigationFullscreen /></IconButton> }
                                     />
                                     <Card>
                                         <CardText>
