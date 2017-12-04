@@ -1,0 +1,12 @@
+{
+  "main.css": "static/css/main.09e43e45.css",
+  "main.css.map": "static/css/main.09e43e45.css.map",
+  "main.js": "static/js/main.d53b0cda.js",
+  "main.js.map": "static/js/main.d53b0cda.js.map",
+  "polyfills.js": "static/js/polyfills.2acc8a2e.js",
+  "polyfills.js.map": "static/js/polyfills.2acc8a2e.js.map",
+  "runtime.js": "static/js/runtime.ea2f6a2a.js",
+  "runtime.js.map": "static/js/runtime.ea2f6a2a.js.map",
+  "vendors.js": "static/js/vendors.4c7a0453.js",
+  "vendors.js.map": "static/js/vendors.4c7a0453.js.map"
+}
